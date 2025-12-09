@@ -1,47 +1,78 @@
-#PolysemyProbe – Dynamic BERT Embeddings
+# PolysemyProbe – Dynamic BERT Embeddings
 
-This project demonstrates how BERT captures contextual (dynamic) word meanings using sentence embeddings, token-level embeddings, and cosine similarity. It also shows how BERT handles polysemy (words with multiple meanings) based on context.
+## Project Overview
+This project explores how **BERT generates contextual word and sentence embeddings**, demonstrating how meaning shifts based on context (polysemy). The workflow includes **sentence encoding, token-level embedding extraction, cosine similarity computation**, and accuracy evaluation on a custom dataset of sentence pairs.
+
 ---
-##Project Overview
 
-This project uses a pre-trained BERT model (bert-base-uncased) from Hugging Face Transformers to:
+## Dataset
+- **Source:** Custom sentence-pair list  
+- **Pairs:** 10  
+- **Labels:**  
+  - 1 = semantically similar  
+  - 0 = not similar  
+- **Features:** Two sentences + similarity label  
+- Includes both **real semantic pairs** and intentionally **contradictory / mismatched** ones.
 
-Generate sentence embeddings using mean pooling or the [CLS] token.
-
-Extract token-level contextual embeddings.
-
-Demonstrate polysemy through context-dependent vector differences.
-
-Compute cosine similarity between sentence pairs.
-
-Predict semantic similarity using a threshold of 0.7.
-
-Evaluate accuracy using a labeled dataset.
 ---
-##Dataset
 
-A custom dataset of 10 sentence pairs, each labeled as:
+## Workflow & Detailed Steps
 
-1 — semantically similar
+### 1. Loading BERT
+- Loaded **BERT tokenizer** and **TFBertModel** (`bert-base-uncased`) from Hugging Face.  
+- Tokenized each sentence into input IDs and attention masks.  
+- Passed inputs through BERT to obtain contextual embeddings.
 
-0 — not similar
+### 2. Sentence Embedding Extraction
+- **[CLS] Token Embedding:** Represents the entire sentence.  
+- **Mean Pooling (used in final run):** Average of all token embeddings to get sentence-level embedding.
 
-The dataset contains both realistic similarities and intentionally mismatched examples.
+### 3. Cosine Similarity Computation
+- Obtained embeddings for each sentence pair.  
+- Computed similarity using `cosine_similarity(embedding1, embedding2)`.  
+- Applied threshold: similarity > 0.7 → 1, otherwise → 0.
+
+### 4. Prediction & Evaluation
+- Generated predictions (`0`/`1`) for each pair.  
+- Compared predictions against ground-truth labels.  
+- Calculated model accuracy.
+
+### 5. Output
+- Printed similarity score, predicted label, and evaluation accuracy.
+
 ---
-##Key NLP Concepts
-**Contextual Embeddings
 
-BERT produces dynamic embeddings where the same word has different vectors depending on context.
+## Key NLP Concepts
 
-**Polysemy
+### Contextual Embeddings
+BERT produces **dynamic embeddings**, where the same word has different vectors depending on context.
 
-Words such as "bank" or "python" change meaning based on usage, and BERT captures this.
+### Polysemy
+Words such as *bank* or *python* change meaning based on usage, and BERT captures this.
 
-**Self-Attention
+### Self-Attention
+BERT uses attention mechanisms to understand relationships between all tokens in a sentence.
 
-BERT uses attention to understand relationships between all tokens in a sentence.
+### Cosine Similarity
+Measures the **semantic closeness** between two sentence embeddings.
 
-**Cosine Similarity
+---
 
-Measures the semantic closeness between two sentence vectors.
+## Skills Demonstrated
+- **Transformer-based NLP:** Hugging Face Transformers  
+- **Sentence Encoding:** CLS vs mean pooling  
+- **Similarity Measurement:** cosine similarity  
+- **Contextual Embedding Analysis:** handling polysemy  
+- **Model Evaluation:** accuracy scoring  
+- **TensorFlow Model Execution:** running TFBertModel on text  
+
+---
+
+## Outputs & Insights
+- Extracted **dynamic, context-aware embeddings** from BERT.  
+- Demonstrated BERT can identify **semantically similar sentences**.  
+- Unrelated sentences yield low similarity scores.  
+- Achieved strong accuracy on the small dataset.  
+- Validated that **BERT captures semantic relationships** better than static vectors.
+
 ---
